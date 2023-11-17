@@ -1,0 +1,4 @@
+#+author: Nicola Ferru Aka NFVblog
+#+title: wlsyshot (wlroots easy screenshot)
+
+A useful script that simplifies screenshotting functions in Wlroots.
