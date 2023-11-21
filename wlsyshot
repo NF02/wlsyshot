@@ -1,0 +1,63 @@
+#!/bin/env bash
+#      .m,                 .,
+#      'T[                 ][         ][
+# W   W ][  .dWW,'W W[.dWW,]bWW, dWb ]WWW
+# T W P ][  ]bm,` W,W ]bm,`]P ][]P T[ ][
+# ]bWd[ ][   ""W, ]WP  ""W,][ ][][ ][ ][
+# 'W W` ]bm ]mmd[  W[ ]mmd[][ ]['WmW` ]bm
+#  " "   ""  """   W   """ '` '` '"`   ""
+#                 W[
+#
+# author: (c) Nicola Ferru Aka NFVblog
+# The software is subject to license restrictions, for more information read the LICENSE file
+
+# Options
+opts="full screen\nselection screen\nselection area\nselection window"
+snipping=$(echo -e $opts | wofi --dmenu -p "Snipping tool")
+if [[ $snipping == "" ]]; then
+    exit 0
+fi
+PICTURE_DIR="$HOME/Immagini"
+temp="/tmp"
+fileName=$(echo "$temp/$(date +'%s_grim.png')")
+
+# function
+opts_mod(){
+    mods="Edit screenshot\nSave\nCopy clipboard\nShere by KDE connect\n"
+    mods_la=$(echo -e $mods | wofi --dmenu -p "Options:")
+    if [[ $mods_la == "" ]]; then
+	exit 0
+    fi
+
+    case $mods_la in
+	"Edit screenshot") swappy -f $1;;
+	"Save") cp $1 $PICTURE_DIR/screenshot/;;
+	"Copy clipboard") wl-copy < $1;;
+    esac
+    notify-send "Finish!"
+}
+
+full_screen(){
+    attualFile=$fileName
+    grim $attualFile
+    opts_mod "$attualFile"
+}
+
+selection_screen(){
+    attualFile=$fileName
+    grim -o $(slurp -f %o -or) $attualFile
+    opts_mod "$attualFile"
+}
+
+selection_area(){
+    attualFile=$fileName
+    grim -g "$(slurp)" $attualFile
+    opts_mod "$attualFile"
+}
+
+# main program
+case $snipping in
+    "full screen") full_screen;;
+    "selection screen") selection_screen;;
+    "selection area") selection_area;;
+esac
