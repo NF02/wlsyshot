@@ -11,6 +11,25 @@
 # author: (c) Nicola Ferru Aka NFVblog
 # The software is subject to license restrictions, for more information read the LICENSE file
 
+command_exists() {
+  command -v "$@" >/dev/null 2>&1
+}
+
+if ! command_exists wofi; then
+    echo "wofi is not installed"
+    exit -1
+fi
+
+if ! command_exists swappy; then
+    echo "swappy is not installed"
+    exit -1
+fi
+
+if ! command_exists wl-copy; then
+    echo "wl-clipboard is not installed"
+    exit -1
+fi
+
 # Options
 opts="full screen\nselection screen\nselection area\nselection window"
 snipping=$(echo -e $opts | wofi --dmenu -p "Snipping tool")
