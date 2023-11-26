@@ -8,8 +8,15 @@ To run this script you need several applications:
  1) wofi;
  2) wl-clipboard;
  3) grim;
- 4) slurp.
+ 4) swappy;
+ 5) slurp.
 on Arch Linux it is possible to install all the dependencies with the pacman package manager, in the clearest and simplest way possible:
 #+begin_src bash
-  sudo pacman -S wofi wl-clipboard grim slurp 
+  sudo pacman -S wofi wl-clipboard grim slurp swappy 
 #+end_src
+
+* Support?
+For those who want to support my projects you can help in two ways:
+ 1) Help me write code directly, contributing directly to projects even with simple translations;
+ 2) donate some change to [[https://ko-fi.com/nfvblog][KO-FI]].
+
