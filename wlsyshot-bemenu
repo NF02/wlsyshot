@@ -1,0 +1,82 @@
+#!/bin/env bash
+#      .m,                 .,
+#      'T[                 ][         ][
+# W   W ][  .dWW,'W W[.dWW,]bWW, dWb ]WWW
+# T W P ][  ]bm,` W,W ]bm,`]P ][]P T[ ][
+# ]bWd[ ][   ""W, ]WP  ""W,][ ][][ ][ ][
+# 'W W` ]bm ]mmd[  W[ ]mmd[][ ]['WmW` ]bm
+#  " "   ""  """   W   """ '` '` '"`   ""
+#                 W[
+#
+# author: (c) Nicola Ferru Aka NFVblog
+# The software is subject to license restrictions, for more information read the LICENSE file
+
+command_exists() {
+  command -v "$@" >/dev/null 2>&1
+}
+
+if ! command_exists bemenu; then
+    echo "bemenu is not installed"
+    exit -1
+fi
+
+if ! command_exists swappy; then
+    echo "swappy is not installed"
+    exit -1
+fi
+
+if ! command_exists wl-copy; then
+    echo "wl-clipboard is not installed"
+    exit -1
+fi
+
+# Options
+opts="full screen\nselection screen\nselection area\nselection window"
+snipping=$(echo -e $opts | bemenu -p "Snipping tool")
+if [[ $snipping == "" ]]; then
+    exit 0
+fi
+PICTURE_DIR="$HOME/Immagini"
+temp="/tmp"
+fileName=$(echo "$temp/$(date +'%s_grim.png')")
+
+# function
+opts_mod(){
+    mods="Edit screenshot\nSave\nCopy clipboard\nShare by KDE connect\n"
+    mods_la=$(echo -e $mods | bemenu -p "Options:")
+    if [[ $mods_la == "" ]]; then
+	exit 0
+    fi
+
+    case $mods_la in
+	"Edit screenshot") swappy -f $1;;
+	"Save") cp $1 $PICTURE_DIR/screenshot/;;
+	"Copy clipboard") wl-copy < $1;;
+    esac
+    notify-send "Finish!"
+}
+
+full_screen(){
+    actualFile=$fileName
+    grim $actualFile
+    opts_mod "$actualFile"
+}
+
+selection_screen(){
+    actualFile=$fileName
+    grim -o $(slurp -f %o -or) $actualFile
+    opts_mod "$actualFile"
+}
+
+selection_area(){
+    actualFile=$fileName
+    grim -g "$(slurp)" $actualFile
+    opts_mod "$actualFile"
+}
+
+# main program
+case $snipping in
+    "full screen") full_screen;;
+    "selection screen") selection_screen;;
+    "selection area") selection_area;;
+esac
