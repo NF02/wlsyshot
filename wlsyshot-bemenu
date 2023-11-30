@@ -15,8 +15,8 @@ command_exists() {
   command -v "$@" >/dev/null 2>&1
 }
 
-if ! command_exists wofi; then
-    echo "wofi is not installed"
+if ! command_exists bemenu; then
+    echo "bemenu is not installed"
     exit -1
 fi
 
@@ -32,7 +32,7 @@ fi
 
 # Options
 opts="full screen\nselection screen\nselection area\nselection window"
-snipping=$(echo -e $opts | wofi --dmenu -p "Snipping tool")
+snipping=$(echo -e $opts | bemenu -p "Snipping tool")
 if [[ $snipping == "" ]]; then
     exit 0
 fi
@@ -43,7 +43,7 @@ fileName=$(echo "$temp/$(date +'%s_grim.png')")
 # function
 opts_mod(){
     mods="Edit screenshot\nSave\nCopy clipboard\nShare by KDE connect\n"
-    mods_la=$(echo -e $mods | wofi --dmenu -p "Options:")
+    mods_la=$(echo -e $mods | bemenu -p "Options:")
     if [[ $mods_la == "" ]]; then
 	exit 0
     fi
