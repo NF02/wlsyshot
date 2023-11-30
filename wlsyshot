@@ -42,7 +42,7 @@ fileName=$(echo "$temp/$(date +'%s_grim.png')")
 
 # function
 opts_mod(){
-    mods="Edit screenshot\nSave\nCopy clipboard\nShere by KDE connect\n"
+    mods="Edit screenshot\nSave\nCopy clipboard\nShare by KDE connect\n"
     mods_la=$(echo -e $mods | wofi --dmenu -p "Options:")
     if [[ $mods_la == "" ]]; then
 	exit 0
@@ -57,21 +57,21 @@ opts_mod(){
 }
 
 full_screen(){
-    attualFile=$fileName
-    grim $attualFile
-    opts_mod "$attualFile"
+    actualFile=$fileName
+    grim $actualFile
+    opts_mod "$actualFile"
 }
 
 selection_screen(){
-    attualFile=$fileName
-    grim -o $(slurp -f %o -or) $attualFile
-    opts_mod "$attualFile"
+    actualFile=$fileName
+    grim -o $(slurp -f %o -or) $actualFile
+    opts_mod "$actualFile"
 }
 
 selection_area(){
-    attualFile=$fileName
-    grim -g "$(slurp)" $attualFile
-    opts_mod "$attualFile"
+    actualFile=$fileName
+    grim -g "$(slurp)" $actualFile
+    opts_mod "$actualFile"
 }
 
 # main program
