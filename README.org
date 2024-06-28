@@ -5,14 +5,19 @@ A useful script that simplifies screenshotting functions in Wlroots.
 
 * Dependence
 To run this script you need several applications:
- 1) wofi;
+ 1) rofi;
  2) wl-clipboard;
  3) grim;
  4) swappy;
- 5) slurp.
+ 5) slurp;
+ 6) jq.
 on Arch Linux it is possible to install all the dependencies with the pacman package manager, in the clearest and simplest way possible:
 #+begin_src bash
-  sudo pacman -S wofi wl-clipboard grim slurp swappy 
+  sudo pacman -S rofi wl-clipboard grim slurp swappy jq 
+#+end_src
+On Void Linux it is possible to install all the dependencies with the pacman package manager, in the clearest and simplest way possible:
+#+begin_src bash
+  sudo xbps-install -S rofi wl-clipboard grim slurp swappy jq
 #+end_src
 
 * Support?

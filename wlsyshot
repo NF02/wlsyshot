@@ -15,8 +15,8 @@ command_exists() {
   command -v "$@" >/dev/null 2>&1
 }
 
-if ! command_exists wofi; then
-    echo "wofi is not installed"
+if ! command_exists rofi; then
+    echo "rofi is not installed"
     exit -1
 fi
 
@@ -30,9 +30,14 @@ if ! command_exists wl-copy; then
     exit -1
 fi
 
+if ! command_exists jq; then
+    echo "jq is not installed"
+    exit -1
+fi
+
 # Options
 opts="full screen\nselection screen\nselection area\nselection window"
-snipping=$(echo -e $opts | wofi --dmenu -p "Snipping tool")
+snipping=$(echo -e $opts | rofi -dmenu -p "Snipping tool")
 if [[ $snipping == "" ]]; then
     exit 0
 fi
@@ -43,7 +48,7 @@ fileName=$(echo "$temp/$(date +'%s_grim.png')")
 # function
 opts_mod(){
     mods="Edit screenshot\nSave\nCopy clipboard\nShare by KDE connect\n"
-    mods_la=$(echo -e $mods | wofi --dmenu -p "Options:")
+    mods_la=$(echo -e $mods | rofi -dmenu -p "Options:")
     if [[ $mods_la == "" ]]; then
 	exit 0
     fi
@@ -74,9 +79,23 @@ selection_area(){
     opts_mod "$actualFile"
 }
 
+## window selection
+function select_window() {
+    local clients=`swaymsg -t get_tree | jq -r '[.. | ((.nodes? // empty) + (.floating_nodes? // empty))[] | select(.visible and .pid)]'`
+    local boxes="$(echo $clients | jq -r '.[] | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height) \(.name)"')"
+    slurp -r <<< "$boxes"
+}
+
+selection_active_window(){
+    actualFile=$fileName
+    grim -g "$(select_window)" $actualFile
+    opts_mod "$actualFile"
+}
+
 # main program
 case $snipping in
     "full screen") full_screen;;
     "selection screen") selection_screen;;
     "selection area") selection_area;;
+    "selection window") selection_active_window;;
 esac
