@@ -45,6 +45,10 @@ PICTURE_DIR="$HOME/Immagini"
 temp="/tmp"
 fileName=$(echo "$temp/$(date +'%s_grim.png')")
 
+if [ ! -d "$PICTURE_DIR/screenshot" ];then
+    mkdir -p $PICTURE_DIR/screenshot/
+fi
+
 # function
 opts_mod(){
     mods="Edit screenshot\nSave\nCopy clipboard\nShare by KDE connect\n"
